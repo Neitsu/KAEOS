@@ -114,3 +114,60 @@ button, input { font: inherit; }
   color: #ff9bb1;
   white-space: pre-wrap;
 }
+
+.panel-note {
+  margin-bottom: 8px;
+  border-color: rgba(255, 188, 87, 0.5);
+  color: #ffdba7;
+  font-size: 0.85rem;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.filters input,
+.filters select {
+  background: rgba(7, 11, 21, 0.85);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.fallback-map {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 15% 20%, rgba(32, 212, 255, 0.14), transparent 40%),
+    radial-gradient(circle at 80% 20%, rgba(157, 125, 255, 0.12), transparent 35%),
+    #070910;
+  overflow: auto;
+  padding: 18px;
+}
+
+.fallback-map__hint {
+  position: sticky;
+  top: 8px;
+  display: inline-block;
+  z-index: 1;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(120, 141, 188, 0.4);
+  background: rgba(8, 12, 24, 0.75);
+  color: #b9c2d8;
+  font-size: 0.8rem;
+}
+
+.fallback-map__svg {
+  min-width: 1700px;
+  min-height: 900px;
+}
+
+@media (max-width: 900px) {
+  .filters {
+    grid-template-columns: 1fr 1fr;
+  }
+}

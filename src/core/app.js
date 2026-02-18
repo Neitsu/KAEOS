@@ -1,10 +1,12 @@
 import { loadUniverse } from './data.js';
 import { createMapScene } from '../scenes/worldMap.js';
+import { createFallbackMapScene } from '../scenes/fallbackMap.js';
 import { SCENES } from './constants.js';
 import { exportSave, importSave, loadSave, persistSave, resetSave } from './save.js';
 
 export async function createApp() {
   const root = document.querySelector('#app');
+  root.removeAttribute('style');
   root.innerHTML = `<div class="shell"><div id="pixi-host" class="pixi-host"></div><div id="ui" class="ui"></div></div>`;
 
   const pixiHost = document.querySelector('#pixi-host');
@@ -17,7 +19,14 @@ export async function createApp() {
     save: loadSave(),
     selectedLevel: null,
     hoveredLevel: null,
-    selectedMember: universe.members[0]?.id ?? null
+    selectedMember: universe.members[0]?.id ?? null,
+    mapMode: 'pixi',
+    questFilters: {
+      type: 'ALL',
+      status: 'ALL',
+      era: 'ALL',
+      query: ''
+    }
   };
 
   let mapController = null;
@@ -31,8 +40,12 @@ export async function createApp() {
     });
   }
 
+  function getLevel(levelId) {
+    return store.universe.levels.find((lvl) => lvl.id === levelId);
+  }
+
   function getLevelStatus(levelId) {
-    const level = store.universe.levels.find((lvl) => lvl.id === levelId);
+    const level = getLevel(levelId);
     if (!level) return 'locked';
 
     const isSecretLocked = level.type === 'SECRET' && !store.save.secretFlags.includes(levelId);
@@ -102,7 +115,8 @@ export async function createApp() {
   async function ensureMapScene() {
     if (store.scene !== SCENES.MAP) return;
     if (mapController) mapController.destroy();
-    mapController = await createMapScene(pixiHost, store.universe, store, {
+
+    const callbacks = {
       getLevelStatus,
       onNodeSelected(level) {
         store.selectedLevel = level;
@@ -112,7 +126,19 @@ export async function createApp() {
         store.hoveredLevel = level;
         renderOverlay();
       }
-    });
+    };
+
+    try {
+      mapController = await createMapScene(pixiHost, store.universe, store, callbacks);
+      store.mapMode = 'pixi';
+    } catch (error) {
+      // Fallback: rendu map SVG/HTML pleinement interactif.
+      mapController = await createFallbackMapScene(pixiHost, store.universe, store, callbacks);
+      store.mapMode = 'fallback';
+      if (!store.save.settings.reducedMotion) console.warn('Pixi indisponible, fallback map activée:', error);
+    }
+
+    renderOverlay();
   }
 
   function renderBoot() {
@@ -132,20 +158,22 @@ export async function createApp() {
   function renderMapPanel() {
     const level = store.selectedLevel;
     const hover = store.hoveredLevel;
+    const collectibles = new Map(store.universe.collectibles.map((item) => [item.id, item]));
     const hoverMarkup = hover ? `<div class="tooltip">${hover.title} · ${hover.type} · ${hover.date}</div>` : '';
     const levelMarkup = !level ? '<div class="panel muted">Select a node to inspect release details.</div>' : `<div class="panel">
       <h3>${level.title}</h3>
-      <p class="meta"><span>${level.type}</span><span>${level.date}</span><span style="color:${level.color}">${level.era}</span></p>
+      <p class="meta"><span>${level.type}</span><span>${level.date}</span><span style="color:${level.color}">${level.era}</span><span>${getLevelStatus(level.id).toUpperCase()}</span></p>
       <p>${level.description}</p>
       <div class="links">${Object.entries(level.links).filter(([, v]) => v).map(([k, v]) => `<a href="${v}" target="_blank" rel="noreferrer">${k}</a>`).join('')}</div>
-      <p class="meta">Collectibles: ${level.rewards.join(', ')}</p>
+      <p class="meta">Collectibles: ${level.rewards.map((id) => collectibles.get(id)?.name ?? id).join(', ')}</p>
       <div class="actions">
         <button data-action="clear" ${getLevelStatus(level.id) === 'locked' ? 'disabled' : ''}>Mark as Cleared</button>
         <button data-action="home">Home</button>
       </div>
     </div>`;
 
-    return `<section class="overlay map-overlay">${hoverMarkup}${levelMarkup}</section>`;
+    const fallbackTag = store.mapMode === 'fallback' ? '<div class="panel panel-note">Map running in compatibility mode.</div>' : '';
+    return `<section class="overlay map-overlay">${hoverMarkup}${fallbackTag}${levelMarkup}</section>`;
   }
 
   function renderCharacters() {
@@ -163,15 +191,40 @@ export async function createApp() {
     </section>`;
   }
 
+  function getFilteredQuestRows() {
+    const levels = store.universe.levels.filter((lvl) => getLevelStatus(lvl.id) !== 'hidden');
+    return levels.filter((lvl) => {
+      const status = getLevelStatus(lvl.id);
+      const f = store.questFilters;
+      if (f.type !== 'ALL' && lvl.type !== f.type) return false;
+      if (f.status !== 'ALL' && status !== f.status) return false;
+      if (f.era !== 'ALL' && lvl.era !== f.era) return false;
+      if (f.query && !`${lvl.title} ${lvl.description}`.toLowerCase().includes(f.query.toLowerCase())) return false;
+      return true;
+    });
+  }
+
   function renderQuestLog() {
-    const rows = store.universe.levels.filter((lvl) => getLevelStatus(lvl.id) !== 'hidden');
+    const rows = getFilteredQuestRows();
+    const eras = [...new Set(store.universe.levels.map((lvl) => lvl.era))];
     return `<section class="overlay quest-log">
       <div class="panel">
-      <h3>Quest Log</h3>
-      <input id="quest-search" placeholder="Search quest..." />
-      <div class="quest-list">
-        ${rows.map((lvl) => `<button class="quest-item" data-open-level="${lvl.id}"><span>${lvl.title}</span><small>${lvl.type} · ${lvl.era}</small><em>${getLevelStatus(lvl.id)}</em></button>`).join('')}
-      </div>
+        <h3>Quest Log</h3>
+        <div class="filters">
+          <input id="quest-search" placeholder="Search quest..." value="${store.questFilters.query}" />
+          <select data-filter="type">
+            ${['ALL', 'MAIN', 'SIDE', 'BOSS', 'SECRET'].map((opt) => `<option value="${opt}" ${store.questFilters.type === opt ? 'selected' : ''}>Type: ${opt}</option>`).join('')}
+          </select>
+          <select data-filter="status">
+            ${['ALL', 'locked', 'unlocked', 'cleared'].map((opt) => `<option value="${opt}" ${store.questFilters.status === opt ? 'selected' : ''}>Status: ${opt}</option>`).join('')}
+          </select>
+          <select data-filter="era">
+            ${['ALL', ...eras].map((opt) => `<option value="${opt}" ${store.questFilters.era === opt ? 'selected' : ''}>Era: ${opt}</option>`).join('')}
+          </select>
+        </div>
+        <div class="quest-list">
+          ${rows.map((lvl) => `<button class="quest-item" data-open-level="${lvl.id}"><span>${lvl.title}</span><small>${lvl.type} · ${lvl.era}</small><em>${getLevelStatus(lvl.id)}</em></button>`).join('')}
+        </div>
       </div>
     </section>`;
   }
@@ -237,7 +290,7 @@ export async function createApp() {
 
     ui.querySelectorAll('[data-open-level]').forEach((button) => {
       button.addEventListener('click', () => {
-        const level = store.universe.levels.find((lvl) => lvl.id === button.dataset.openLevel);
+        const level = getLevel(button.dataset.openLevel);
         if (!level) return;
         store.selectedLevel = level;
         transitionTo(SCENES.MAP);
@@ -248,12 +301,17 @@ export async function createApp() {
     const search = ui.querySelector('#quest-search');
     if (search) {
       search.addEventListener('input', () => {
-        const value = search.value.toLowerCase();
-        ui.querySelectorAll('.quest-item').forEach((item) => {
-          item.style.display = item.textContent.toLowerCase().includes(value) ? '' : 'none';
-        });
+        store.questFilters.query = search.value;
+        renderOverlay();
       });
     }
+
+    ui.querySelectorAll('[data-filter]').forEach((select) => {
+      select.addEventListener('change', () => {
+        store.questFilters[select.dataset.filter] = select.value;
+        renderOverlay();
+      });
+    });
 
     ui.querySelectorAll('[data-action]').forEach((button) => {
       button.addEventListener('click', async () => {

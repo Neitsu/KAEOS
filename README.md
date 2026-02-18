@@ -8,6 +8,7 @@ Site vitrine interactif **100% statique** pour KÆOS / KAEOS, style game-like (h
 - JavaScript (ES modules)
 - PixiJS (World Map WebGL)
 - UI overlay HTML/CSS (panels, filtres, settings)
+- Fallback map HTML/SVG automatique si PixiJS indisponible (le site reste utilisable)
 
 ## Lancer le projet
 
