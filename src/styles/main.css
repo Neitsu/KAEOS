@@ -94,3 +94,23 @@ button, input { font: inherit; }
   .characters, .codex-grid { grid-template-columns: 1fr; }
   .map-overlay { align-self: stretch; margin: auto 0 0; }
 }
+
+.fatal-error {
+  min-height: 100vh;
+  display: grid;
+  place-content: center;
+  gap: 10px;
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.fatal-error pre {
+  margin: 0;
+  border: 1px solid var(--line);
+  background: rgba(6, 10, 20, 0.85);
+  border-radius: 10px;
+  padding: 12px;
+  color: #ff9bb1;
+  white-space: pre-wrap;
+}

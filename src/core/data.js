@@ -1,5 +1,6 @@
 export async function loadUniverse() {
-  const response = await fetch('/data/kaeos-universe.json');
-  if (!response.ok) throw new Error('Impossible de charger kaeos-universe.json');
+  const url = `${import.meta.env.BASE_URL}data/kaeos-universe.json`;
+  const response = await fetch(url);
+  if (!response.ok) throw new Error(`Impossible de charger kaeos-universe.json (${response.status})`);
   return response.json();
 }
