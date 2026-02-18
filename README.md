@@ -143,3 +143,10 @@ Support:
 
 Le projet fonctionne sans textures finales (fallback canvas/UI).
 Remplacer les placeholders dans `assets/` par les ressources premium finales pour production.
+
+
+## Direction visuelle pixel art
+
+- UI retravaillée en style pixel-art (cadres 8-bit, scanlines, palette fantasy).
+- Le site reste utilisable même si Pixi/WebGL échoue grâce au fallback map SVG interactif.
+- Les scènes principales (Boot, Map, Quest Log, Characters, Codex, Settings) sont navigables sans écran noir.

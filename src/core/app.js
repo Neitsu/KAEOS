@@ -88,8 +88,15 @@ export async function createApp() {
     return true;
   }
 
+  function getFirstVisibleLevel() {
+    return store.universe.levels.find((lvl) => getLevelStatus(lvl.id) !== 'hidden');
+  }
+
   function transitionTo(scene) {
     store.scene = scene;
+    if (scene === SCENES.MAP && !store.selectedLevel) {
+      store.selectedLevel = getFirstVisibleLevel() ?? null;
+    }
     ui.classList.add('transition');
     setTimeout(() => {
       ui.classList.remove('transition');
@@ -114,6 +121,7 @@ export async function createApp() {
 
   async function ensureMapScene() {
     if (store.scene !== SCENES.MAP) return;
+    if (!store.selectedLevel) store.selectedLevel = getFirstVisibleLevel() ?? null;
     if (mapController) mapController.destroy();
 
     const callbacks = {

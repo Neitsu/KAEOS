@@ -22,7 +22,7 @@ export async function createMapScene(host, universe, store, callbacks) {
   const { Application, Container, Graphics, Text } = await getPixi();
 
   const app = new Application();
-  await app.init({ resizeTo: host, antialias: true, backgroundColor: 0x080a10 });
+  await app.init({ resizeTo: host, antialias: false, backgroundColor: 0x1b2f2b });
   host.innerHTML = '';
   host.appendChild(app.canvas);
 
@@ -175,9 +175,9 @@ function createNode(pixi, level, status, reducedMotion) {
   const title = new Text({
     text: level.title,
     style: {
-      fontFamily: 'Inter',
-      fontSize: 12,
-      fill: status === 'locked' ? '#838897' : '#f4f7ff'
+      fontFamily: 'VT323, monospace',
+      fontSize: 22,
+      fill: status === 'locked' ? '#7e8f77' : '#f7f2dc'
     }
   });
   title.y = 24;
@@ -202,17 +202,23 @@ function drawRoutes(Graphics, target, levels) {
 }
 
 function drawParallax(Graphics, target) {
-  for (let layer = 0; layer < 3; layer += 1) {
-    const g = new Graphics();
-    g.rect(-2200, -1400, 5000, 3400).fill({ color: layer === 0 ? 0x090b14 : layer === 1 ? 0x10152a : 0x141b31, alpha: 0.5 - layer * 0.08 });
-    target.addChild(g);
-  }
+  const sky = new Graphics();
+  sky.rect(-2200, -1400, 5000, 1500).fill({ color: 0x8addca, alpha: 0.38 });
+  target.addChild(sky);
+
+  const haze = new Graphics();
+  haze.rect(-2200, 0, 5000, 700).fill({ color: 0xb5df81, alpha: 0.24 });
+  target.addChild(haze);
+
+  const ground = new Graphics();
+  ground.rect(-2200, 540, 5000, 1600).fill({ color: 0x25463a, alpha: 0.34 });
+  target.addChild(ground);
 }
 
 function spawnParticles(Graphics, target, reducedMotion) {
   for (let i = 0; i < 120; i += 1) {
     const dot = new Graphics();
-    dot.circle(0, 0, reducedMotion ? 1 : Math.random() * 2 + 0.5).fill({ color: 0x63f5ff, alpha: reducedMotion ? 0.05 : 0.14 });
+    dot.circle(0, 0, reducedMotion ? 1 : Math.random() * 2 + 0.5).fill({ color: 0xfff5be, alpha: reducedMotion ? 0.04 : 0.12 });
     dot.x = Math.random() * 2200 - 900;
     dot.y = Math.random() * 1800 - 900;
     target.addChild(dot);
