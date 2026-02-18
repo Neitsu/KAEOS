@@ -150,3 +150,4 @@ Remplacer les placeholders dans `assets/` par les ressources premium finales pou
 - UI retravaillée en style pixel-art (cadres 8-bit, scanlines, palette fantasy).
 - Le site reste utilisable même si Pixi/WebGL échoue grâce au fallback map SVG interactif.
 - Les scènes principales (Boot, Map, Quest Log, Characters, Codex, Settings) sont navigables sans écran noir.
+- World Map retravaillée en île pixel-art (biomes, routes, landmarks, nuages) avec nodes interactifs.
