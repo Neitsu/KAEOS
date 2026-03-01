@@ -1,0 +1,259 @@
+{
+  "meta": {
+    "title": "KÆOS Universe",
+    "fallbackTitle": "KAEOS Universe",
+    "version": "1.0.0",
+    "defaultScene": "boot"
+  },
+  "theme": {
+    "accentColors": {
+      "electricBlue": "#20d4ff",
+      "cherryRed": "#ff496c",
+      "lime": "#8dff5c",
+      "violet": "#9d7dff",
+      "cyan": "#63f5ff",
+      "chrome": "#c7ccda"
+    },
+    "fonts": {
+      "display": "Orbitron",
+      "body": "Inter"
+    }
+  },
+  "members": [
+    {
+      "id": "m1",
+      "name": "Astra",
+      "role": "Leader",
+      "color": "#20d4ff",
+      "sprite": "assets/sprites/m1.png",
+      "icon": "assets/icons/m1.svg",
+      "item": "c_holo_astra",
+      "stats": { "hp": 7, "atk": 6, "spd": 8, "cha": 9, "sync": 8 },
+      "skills": ["Press Start", "Signal Sync", "Neon Drive"],
+      "links": { "instagram": "https://instagram.com", "youtube": "https://youtube.com" }
+    },
+    {
+      "id": "m2",
+      "name": "Rin",
+      "role": "Center",
+      "color": "#ff496c",
+      "sprite": "assets/sprites/m2.png",
+      "icon": "assets/icons/m2.svg",
+      "item": "c_vinyl_rin",
+      "stats": { "hp": 6, "atk": 8, "spd": 7, "cha": 8, "sync": 7 },
+      "skills": ["Dream in Stereo", "Heart Rush", "Moon Trigger"],
+      "links": { "instagram": "https://instagram.com", "youtube": "https://youtube.com" }
+    },
+    {
+      "id": "m3",
+      "name": "Yuna",
+      "role": "Ace",
+      "color": "#8dff5c",
+      "sprite": "assets/sprites/m3.png",
+      "icon": "assets/icons/m3.svg",
+      "item": "c_chip_yuna",
+      "stats": { "hp": 8, "atk": 7, "spd": 6, "cha": 7, "sync": 9 },
+      "skills": ["Backlight", "Pulse Spin"],
+      "links": { "instagram": "https://instagram.com", "youtube": "https://youtube.com" }
+    },
+    {
+      "id": "m4",
+      "name": "Nova",
+      "role": "Voice",
+      "color": "#9d7dff",
+      "sprite": "assets/sprites/m4.png",
+      "icon": "assets/icons/m4.svg",
+      "item": "c_badge_nova",
+      "stats": { "hp": 5, "atk": 6, "spd": 9, "cha": 10, "sync": 8 },
+      "skills": ["Bit Crush", "Skyline", "Livewire"],
+      "links": { "instagram": "https://instagram.com", "youtube": "https://youtube.com" }
+    },
+    {
+      "id": "m5",
+      "name": "Kira",
+      "role": "Rapper",
+      "color": "#63f5ff",
+      "sprite": "assets/sprites/m5.png",
+      "icon": "assets/icons/m5.svg",
+      "item": "c_key_kira",
+      "stats": { "hp": 7, "atk": 9, "spd": 8, "cha": 6, "sync": 7 },
+      "skills": ["Static Flow", "Code Rain", "Echo Lock"],
+      "links": { "instagram": "https://instagram.com", "youtube": "https://youtube.com" }
+    }
+  ],
+  "collectibles": [
+    { "id": "c_holo_astra", "name": "Astra Holo Card", "type": "card", "icon": "assets/collectibles/card-astra.png" },
+    { "id": "c_vinyl_rin", "name": "Rin Vinyl Fragment", "type": "record", "icon": "assets/collectibles/vinyl-rin.png" },
+    { "id": "c_chip_yuna", "name": "Yuna Data Chip", "type": "chip", "icon": "assets/collectibles/chip-yuna.png" },
+    { "id": "c_badge_nova", "name": "Nova Stage Badge", "type": "badge", "icon": "assets/collectibles/badge-nova.png" },
+    { "id": "c_key_kira", "name": "Kira Portal Key", "type": "key", "icon": "assets/collectibles/key-kira.png" },
+    { "id": "c_group_emblem", "name": "KÆOS Group Emblem", "type": "artifact", "icon": "assets/collectibles/group-emblem.png" }
+  ],
+  "levels": [
+    {
+      "id": "lvl_boot",
+      "title": "Boot Sequence",
+      "type": "MAIN",
+      "date": "2026-03-01",
+      "era": "Start Screen",
+      "color": "#20d4ff",
+      "position": { "x": 0, "y": 0 },
+      "requires": [],
+      "description": "Le signal initial du Nexus. Toute progression commence ici.",
+      "links": { "youtube": "https://youtube.com", "spotify": "https://spotify.com", "instagram": "https://instagram.com" },
+      "unlock": { "mode": "manual", "code": null },
+      "rewards": ["c_holo_astra"]
+    },
+    {
+      "id": "lvl_press_start",
+      "title": "Press Start",
+      "type": "MAIN",
+      "date": "2026-04-15",
+      "era": "Start Screen",
+      "color": "#ff496c",
+      "position": { "x": 280, "y": -120 },
+      "requires": ["lvl_boot"],
+      "description": "Premier titre officiel du groupe avec l'identité KÆOS.",
+      "links": { "youtube": "https://youtube.com", "spotify": "https://spotify.com", "instagram": "https://instagram.com" },
+      "unlock": { "mode": "manual", "code": null },
+      "rewards": ["c_vinyl_rin"]
+    },
+    {
+      "id": "lvl_arcade_glow",
+      "title": "Arcade Glow",
+      "type": "SIDE",
+      "date": "2026-05-02",
+      "era": "Neon Run",
+      "color": "#8dff5c",
+      "position": { "x": 520, "y": 30 },
+      "requires": ["lvl_press_start"],
+      "description": "Cover performance avec chorégraphie full LED.",
+      "links": { "youtube": "https://youtube.com", "spotify": "", "instagram": "https://instagram.com" },
+      "unlock": { "mode": "manual", "code": null },
+      "rewards": ["c_chip_yuna"]
+    },
+    {
+      "id": "lvl_skyline_drive",
+      "title": "Skyline Drive",
+      "type": "MAIN",
+      "date": "2026-06-10",
+      "era": "Neon Run",
+      "color": "#9d7dff",
+      "position": { "x": 760, "y": -180 },
+      "requires": ["lvl_arcade_glow"],
+      "description": "Comeback principal orienté synthwave et basses brisées.",
+      "links": { "youtube": "https://youtube.com", "spotify": "https://spotify.com", "instagram": "https://instagram.com" },
+      "unlock": { "mode": "manual", "code": null },
+      "rewards": ["c_badge_nova"]
+    },
+    {
+      "id": "lvl_core_break",
+      "title": "Core Break",
+      "type": "BOSS",
+      "date": "2026-07-22",
+      "era": "Breakpoint",
+      "color": "#63f5ff",
+      "position": { "x": 980, "y": 50 },
+      "requires": ["lvl_skyline_drive"],
+      "description": "Performance événementielle avec live band et VJ glitch.",
+      "links": { "youtube": "https://youtube.com", "spotify": "", "instagram": "https://instagram.com" },
+      "unlock": { "mode": "manual", "code": null },
+      "rewards": ["c_key_kira"]
+    },
+    {
+      "id": "lvl_neon_echo",
+      "title": "Neon Echo",
+      "type": "SIDE",
+      "date": "2026-08-19",
+      "era": "Breakpoint",
+      "color": "#20d4ff",
+      "position": { "x": 1240, "y": -100 },
+      "requires": ["lvl_core_break"],
+      "description": "Version remix club avec duo vocal.",
+      "links": { "youtube": "https://youtube.com", "spotify": "https://spotify.com", "instagram": "https://instagram.com" },
+      "unlock": { "mode": "manual", "code": null },
+      "rewards": ["c_group_emblem"]
+    },
+    {
+      "id": "lvl_final_signal",
+      "title": "Final Signal",
+      "type": "MAIN",
+      "date": "2026-09-30",
+      "era": "Final Signal",
+      "color": "#ff496c",
+      "position": { "x": 1520, "y": 20 },
+      "requires": ["lvl_neon_echo"],
+      "description": "Grand final de l'arc narratif avec reveal des collectibles.",
+      "links": { "youtube": "https://youtube.com", "spotify": "https://spotify.com", "instagram": "https://instagram.com" },
+      "unlock": { "mode": "manual", "code": null },
+      "rewards": ["c_group_emblem"]
+    },
+    {
+      "id": "lvl_secret_zero",
+      "title": "Secret Room: Zero Trace",
+      "type": "SECRET",
+      "date": "2026-10-12",
+      "era": "Ghostline",
+      "color": "#8dff5c",
+      "position": { "x": 890, "y": -420 },
+      "requires": ["lvl_core_break"],
+      "description": "Room cachée avec teaser d'une future era.",
+      "links": { "youtube": "https://youtube.com", "spotify": "", "instagram": "https://instagram.com" },
+      "unlock": { "mode": "code", "code": "NEONKEY" },
+      "rewards": ["c_group_emblem"]
+    }
+  ],
+  "secrets": [
+    { "code": "NEONKEY", "unlocks": ["lvl_secret_zero"], "hint": "Le code apparaît dans les interludes de Core Break." }
+  ],
+  "patchNotes": [
+    {
+      "version": "1.0.0",
+      "date": "2026-03-01",
+      "notes": [
+        "Lancement du Nexus et de la map principale.",
+        "Ajout des 5 membres jouables dans Character Select.",
+        "Système de sauvegarde locale + collectibles." 
+      ]
+    },
+    {
+      "version": "1.1.0",
+      "date": "2026-06-10",
+      "notes": [
+        "Nouvelle era Neon Run avec Skyline Drive.",
+        "Optimisation mobile sur pan/zoom.",
+        "Ajout du mode Reduced Motion." 
+      ]
+    },
+    {
+      "version": "1.1.2-hotfix",
+      "date": "2026-06-16",
+      "notes": [
+        "Correctif sur import/export de sauvegarde.",
+        "Amélioration des transitions glitch sur appareils iOS." 
+      ]
+    }
+  ],
+  "codex": [
+    {
+      "id": "nexus",
+      "title": "Nexus",
+      "content": "Le Nexus est le hub principal où convergent les signaux de chaque era KÆOS."
+    },
+    {
+      "id": "signals",
+      "title": "Signals",
+      "content": "Les Signals sont des fragments de souvenirs encapsulés dans chaque performance."
+    },
+    {
+      "id": "eras",
+      "title": "Eras",
+      "content": "Chaque era introduit une palette, un style sonore et des collectibles uniques."
+    },
+    {
+      "id": "collectibles",
+      "title": "Collectibles",
+      "content": "Les collectibles sont des artefacts premium débloqués après chaque niveau clear."
+    }
+  ]
+}
